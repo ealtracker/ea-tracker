@@ -178,6 +178,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 tr.me td{background:rgba(45,212,191,.12);font-weight:700}
 td.t{white-space:normal;min-width:150px}
 ul.list{columns:2 240px;padding-left:18px}ul.list li{margin:3px 0}
+.note{background:rgba(226,162,59,.10);border:1px solid rgba(226,162,59,.45);border-radius:12px;padding:10px 12px;font-size:.88rem;color:#e9e1d0}
 .cta{margin:28px 0}footer{color:#9aabc3;font-size:.85rem;margin-top:24px;padding-top:12px;padding-bottom:28px;border-top:1px solid rgba(150,180,225,.14)}
 """
 
@@ -273,7 +274,7 @@ def write_share_pages(data, outdir, site, slugs):
                     rows.append(f'<tr><td>{H.escape(t[3])}</td><td class="t">{nm}</td><td>{H.escape(t[4])}</td><td class="n">{t[6]} of {div_size(t)}</td><td class="n">{t[8]}</td><td class="n">{t[9]}-{t[10]}-{t[11]}</td><td class="n">{t[12]}-{t[13]}</td><td class="n"><b>{t[7]}</b></td></tr>')
                 else:
                     rows.append(f'<tr><td>{H.escape(t[3])}</td><td class="t">{nm}</td><td>{H.escape(t[4])}</td><td colspan="5">Not in the league table yet</td></tr>')
-            body.append(f'<h2>{H.escape(comps[c])} teams</h2><div class="wrap"><table><thead><tr><th>Age</th><th>Team</th><th>Division</th><th class="n">Pos</th><th class="n">GP</th><th class="n">W-D-L</th><th class="n">GF-GA</th><th class="n">Pts</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
+            body.append(f'<h2>{H.escape(comps[c])} teams</h2>' + (f'<p class="note">The league hasn\'t published {H.escape(comps[c])} standings since {H.escape(data.get("calcSince") or "")}. Positions are calculated by EAL Tracker from the league\'s match scores; teams level on points per game may be ordered differently by the league.</p>' if c in (data.get('calc') or []) else '') + f'<div class="wrap"><table><thead><tr><th>Age</th><th>Team</th><th>Division</th><th class="n">Pos</th><th class="n">GP</th><th class="n">W-D-L</th><th class="n">GF-GA</th><th class="n">Pts</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
         ms = sorted({m[0]: m for i in tix for m in by_team.get(i, [])}.values(), key=lambda m: (m[1], m[0]))
         up = [m for m in ms if m[4] is None and m[1] >= now][:15]
         done = [m for m in ms if m[4] is not None and m[1] <= now][-15:][::-1]
@@ -311,11 +312,13 @@ def write_share_pages(data, outdir, site, slugs):
         url = f'{site}team/{k}/'
         target = f'{root}#team-{k}'
         if t[8] is not None:
-            summ = f'{_ord(t[6])} of {div_size(t)} with {t[7]} points from {t[8]} games ({t[9]} wins, {t[10]} draws, {t[11]} losses; goals {t[12]}-{t[13]}).'
+            pl = lambda n, w: f'{n} {w}' + ('' if n == 1 else ('es' if w == 'loss' else 's'))
+            summ = f'{_ord(t[6])} of {div_size(t)} with {pl(t[7], "point")} from {pl(t[8], "game")} ({pl(t[9], "win")}, {pl(t[10], "draw")}, {pl(t[11], "loss")}; goals {t[12]}-{t[13]}).'
         else:
             summ = 'Not in the league table yet.'
         if len(t) > 15 and t[15] is not None:
             summ += f' {_ord(t[15])} in the EAL Tracker national ranking for {t[3]} {comps[t[2]]}.'
+        calc_note = (f'<p class="note">The league hasn\'t published {H.escape(comps[t[2]])} standings since {H.escape(data.get("calcSince") or "")}. This table is calculated by EAL Tracker from the league\'s match scores (win 3, draw 1, loss 0, ranked by points per game); teams level on points per game may be ordered differently by the league.</p>' if t[2] in (data.get('calc') or []) else '')
         body = [f'<div class="hd">{crest_img(t[1], cname + " crest")}<div><h1>{H.escape(t[0])} {H.escape(t[3])}</h1></div></div>',
                 f'<p class="lead">{H.escape(comps[t[2]])} · {H.escape(t[3])} {H.escape(t[4])} division · Elite Academy League {H.escape(data["season"])}. {H.escape(summ)}</p>']
         div = sorted([x for x in teams if x[2] == t[2] and x[3] == t[3] and x[4] == t[4] and x[6] is not None], key=lambda x: (x[6], x[0]))
@@ -325,7 +328,7 @@ def write_share_pages(data, outdir, site, slugs):
                 u = team_url(x)
                 nm = H.escape(x[0]) if x is t or not u else f'<a href="{u}">{H.escape(x[0])}</a>'
                 rows.append(f'<tr class="{"me" if x is t else ""}"><td class="n">{x[6]}</td><td class="t">{nm}</td><td class="n">{x[8]}</td><td class="n">{x[9]}</td><td class="n">{x[10]}</td><td class="n">{x[11]}</td><td class="n">{x[12]}-{x[13]}</td><td class="n"><b>{x[7]}</b></td></tr>')
-            body.append(f'<h2>{H.escape(t[3])} {H.escape(t[4])} standings</h2><div class="wrap"><table><thead><tr><th class="n">#</th><th>Team</th><th class="n">GP</th><th class="n">W</th><th class="n">D</th><th class="n">L</th><th class="n">GF-GA</th><th class="n">Pts</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
+            body.append(f'<h2>{H.escape(t[3])} {H.escape(t[4])} standings</h2>{calc_note}<div class="wrap"><table><thead><tr><th class="n">#</th><th>Team</th><th class="n">GP</th><th class="n">W</th><th class="n">D</th><th class="n">L</th><th class="n">GF-GA</th><th class="n">Pts</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
         ms = by_team.get(i, [])
         up = [m for m in ms if m[4] is None and m[1] >= now]
         done = [m for m in ms if m[4] is not None][::-1]

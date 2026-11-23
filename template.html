@@ -260,6 +260,7 @@ tr.me:hover td{background:rgba(79,140,255,.16)}
 .vmatch:hover{border-color:var(--line-2)}
 .vmatch .on-name{flex:1;min-width:0;font-weight:600;overflow-wrap:break-word}
 .vmatch small{display:block;color:var(--muted);font-weight:500;font-size:.76rem}
+@media (max-width:420px){.vmatch{flex-wrap:wrap}.vmatch .on-name{min-width:min(9rem,100%)}}
 
 /* highlights */
 .hl{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:11px 12px;text-decoration:none;color:var(--ink);background:rgba(255,255,255,.015)}
@@ -727,6 +728,8 @@ body{--clubc:var(--club,#2dd4bf)}
 @media (max-width:979px){.hero.home{gap:18px}.hero.home .pitch{background-size:auto}.cwall{order:-1;margin:0 calc(-1 * clamp(22px,4vw,42px));gap:10px}.cw-row:nth-child(n+3){display:none}.cw-track{gap:10px}.cw-track a{width:54px;height:54px;border-radius:14px}.cw-track img{width:42px;height:42px}}
 .about-site{max-width:760px;color:var(--muted);margin:0}
 .about-site a{color:var(--accent-2)}
+.calc-note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid rgba(226,162,59,.45);background:rgba(226,162,59,.10);font-size:.9rem;color:#e9e1d0}
+.calc-note .pill{flex:none}
 /* rankings */
 .rhead{text-align:center;padding:24px 18px;display:grid;justify-items:center;gap:10px;grid-template-columns:minmax(0,1fr)}
 .rhead>*{max-width:100%;min-width:0}
@@ -1165,8 +1168,10 @@ function compSeg(c,comp,target){
   if(cs.length<2)return '';
   return `<nav class="seg accent" aria-label="Competition">${cs.map(x=>`<a class="${x===comp?'on':''}" href="${target(x)}">${esc(cmpName(x))}</a>`).join('')}</nav>`;
 }
+const calcComp=c=>(D.calc||[]).includes(c);
+const calcBanner=c=>calcComp(c)?`<div class="calc-note" role="note"><span class="pill D">!</span><span><b>${esc(cmpName(c))} tables are calculated by EAL Tracker.</b> The league hasn't published ${esc(cmpName(c))} standings since ${esc(D.calcSince||'')}, so these tables are built from the league's own match scores (win 3, draw 1, loss 0, ranked by points per game). Teams level on points per game may be in a different order than the league would show. The official tables come back here automatically when the league publishes them again.</span></div>`:'';
 function header(c,comp,title,sub,tabs,seg,rkLink,shareUrl,extra){
-  return `<section class="glass head">
+  return `${calcBanner(comp)}<section class="glass head">
     <div class="head-top">${crest(c.id,'lg')}
       <div class="head-txt"><div class="eyebrow">Elite Academy League <span class="tag">${esc(cmpName(comp))}</span> ${esc(D.season)}</div><h1>${esc(title)}</h1><div class="sub">${esc(sub)}</div></div>
       <div class="head-actions">${rkLink}${picker('hdr',`${I.swap} Switch club`,c.id,'')}<button type="button" class="btn primary" data-share="${esc(shareUrl||'')}">${I.share} Share</button></div>
@@ -1273,7 +1278,7 @@ function standingsCard(t){
   const rows=tableOf(t).map(r=>{const gd=r.gf-r.ga;return `<tr class="${r===t?'me':''}"><td>${r.rank}</td><td class="l t"><a href="#${tkey(r)}">${crest(r.club,'sm',r.name)}<span>${esc(r.name)}</span></a></td><td>${r.mp}</td><td class="so">${r.w}-${r.d}-${r.l}</td><td class="hm">${r.w}</td><td class="hm">${r.d}</td><td class="hm">${r.l}</td><td class="hm">${r.gf}</td><td class="hm">${r.ga}</td><td>${sgn(gd)}</td><td class="hm">${esc(r.ppm)}</td><td class="hm">${fdots(r)}</td><td class="pts">${r.pts}</td></tr>`}).join('');
   return `<section class="stack" style="gap:10px"><div class="sec-h"><h2>Standings</h2><span class="muted" style="font-size:.88rem">${esc(t.age)} ${esc(t.div)} · ${esc(cmpName(t.comp))}</span></div>
    <div class="glass" style="padding:0 18px"><div class="tw"><table><thead><tr><th>#</th><th class="l">Team</th><th>P</th><th class="so">W-D-L</th><th class="hm">W</th><th class="hm">D</th><th class="hm">L</th><th class="hm">GF</th><th class="hm">GA</th><th>GD</th><th class="hm">PPM</th><th class="hm">Form</th><th>Pts</th></tr></thead><tbody>${rows||'<tr><td colspan="13" class="l">This team is not in the league table.</td></tr>'}</tbody></table></div></div>
-   <p class="table-note">Official Elite Academy League table order, as published by the league. PPM is points per match. Win 3, draw 1, loss 0.</p></section>`;
+   <p class="table-note">${calcComp(t.comp)?`Calculated by EAL Tracker from the league's match scores, because the league isn't publishing ${esc(cmpName(t.comp))} tables right now. Ranked by points per match, then total points, head-to-head, goal difference and fewest goals against. Teams level on PPM may be ordered differently by the league.`:'Official Elite Academy League table order, as published by the league.'} PPM is points per match. Win 3, draw 1, loss 0.</p></section>`;
 }
 function matchCard(t,m){
   const isP=played(m),aw=!isP&&m.dt<now;
@@ -1399,6 +1404,7 @@ function viewAbout(){
    <div class="check"><span class="pill D">!</span><span><b class="num">${C.tbdPast.length}</b> matches have a date before this update but no score. They show as “Awaiting score” and aren't counted in any table.</span></div>
    <div class="check"><span class="pill D">!</span><span><b class="num">${C.futureScored.length}</b> matches have a score but a date after this update. The official table counts them, so they appear as results with a note.${C.futureScored.map(x=>`<small>#${x[0]} ${esc(x[1])} · ${esc(x[2])} · ${esc(x[3])} ${esc(x[4])} ${esc(x[5])} · listed ${esc(x[6])}</small>`).join('')}</span></div>
    <div class="check"><span class="pill D">!</span><span><b class="num">${C.midnight.toLocaleString()}</b> upcoming matches are listed at 12:00 AM. That looks like a placeholder, so they show the kickoff as TBD.</span></div>
+   ${(D.calc||[]).map(c=>`<div class="check"><span class="pill D">!</span><span><b>${esc(cmpName(c))}</b>: the league hasn't published these standings since ${esc(D.calcSince||'')}. Its tables are calculated here from the league's match scores until the official tables return. When the official tables last appeared, the calculated numbers matched them on every line, and the order matched except among teams level on points per game.</span></div>`).join('')}
    ${C.noTable.length?`<div class="check"><span class="pill D">!</span><span><b>${esc(C.noTable.join(', '))}</b> ${C.noTable.length>1?'have':'has'} scheduled matches but no line in the official table, so the site shows “Not in table”.</span></div>`:''}
   </section>`;
 }
