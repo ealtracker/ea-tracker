@@ -69,7 +69,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json data/history crests
+          git add data/latest.json data/history data/pull-report.json crests
           if git diff --cached --quiet; then
             echo "No data changes"
           else

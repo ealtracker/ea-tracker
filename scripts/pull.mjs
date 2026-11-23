@@ -75,6 +75,7 @@ export function parseStandings(t, b, age) {
 
 async function main() {
   const matches = [], standings = [], pages = {};
+  const report = { pulledAt: new Date().toISOString(), tables: [] };
   for (const b of BRACKETS) {
     const first = parseMatchesPage(await get(matchesUrl(b, 1)));
     pages[b] = first.pages; matches.push(...first.rows);
@@ -86,7 +87,9 @@ async function main() {
     }
     for (const a of Object.keys(AGES)) {
       const t = await get(`/public_schedule/league/get_teams?tournament_type=league&UID_age=${a}&UID_gender=3&UID_event=${SEASON.event}&list_type=${b}`);
-      standings.push(...parseStandings(t, b, AGES[a]));
+      const rows = parseStandings(t, b, AGES[a]);
+      standings.push(...rows);
+      report.tables.push({ bracket: b, age: AGES[a], rows: rows.length, bytes: t.length, ...(rows.length ? {} : { sample: t.replace(/\s+/g, ' ').slice(0, 1500) }) });
       await sleep(250);
     }
     console.log(`bracket ${b}: ${pages[b]} pages`);
@@ -95,6 +98,8 @@ async function main() {
   if (unique !== matches.length) throw new Error(`duplicate matches: ${matches.length} rows, ${unique} unique`);
   const bad = matches.filter(m => !/^\d+ : \d+$|^TBD$/.test(m.s) || !m.id || !m.h || !m.a);
   if (bad.length) throw new Error('unreadable match rows: ' + JSON.stringify(bad.slice(0, 3)));
+  report.matchesPerBracket = Object.fromEntries(BRACKETS.map(b => [b, matches.filter(m => m.b === ({ 47: 'EA', 51: 'EA National', 48: 'EA2' })[b]).length]));
+  writeFileSync('data/pull-report.json', JSON.stringify(report, null, 1));
   writeFileSync(process.argv[2] || 'data/raw.json', JSON.stringify({ pulledAt: new Date().toISOString(), source: 'modular11.com', pages, matches, standings }));
   console.log(`matches ${matches.length}, standings ${standings.length}`);
 }
