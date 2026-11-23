@@ -1,5 +1,5 @@
 {
- "pulledAt": "2026-11-23T13:52:50.864Z",
+ "pulledAt": "2026-11-23T13:58:07.685Z",
  "tables": [
   {
    "bracket": 47,
@@ -152,6 +152,28 @@
    "age": "U15",
    "rows": 38,
    "bytes": 142513
+  }
+ ],
+ "probe": [
+  {
+   "list_type": 63,
+   "rows": 128,
+   "teams": [
+    "La Cantera",
+    "ALBION SC Miami",
+    "United Stars Academy",
+    "PSL Hurricanes",
+    "Ignite Soccer Academy",
+    "USA of Indiana"
+   ],
+   "divs": [
+    "U15 Florida Division",
+    "U15 Mid-America Division",
+    "U15 Nor Cal Division",
+    "U15 Northeast (East) Division",
+    "U15 Northeast (West) Division",
+    "U15 PACNW Division"
+   ]
   }
  ],
  "matchesPerBracket": {
