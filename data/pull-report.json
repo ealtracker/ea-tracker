@@ -1,0 +1,162 @@
+{
+ "pulledAt": "2026-11-23T13:52:50.864Z",
+ "tables": [
+  {
+   "bracket": 47,
+   "age": "U16",
+   "rows": 128,
+   "bytes": 475364
+  },
+  {
+   "bracket": 47,
+   "age": "U17",
+   "rows": 128,
+   "bytes": 475327
+  },
+  {
+   "bracket": 47,
+   "age": "U12",
+   "rows": 70,
+   "bytes": 261022
+  },
+  {
+   "bracket": 47,
+   "age": "U11",
+   "rows": 63,
+   "bytes": 234419
+  },
+  {
+   "bracket": 47,
+   "age": "U13",
+   "rows": 128,
+   "bytes": 475616
+  },
+  {
+   "bracket": 47,
+   "age": "U14",
+   "rows": 128,
+   "bytes": 475561
+  },
+  {
+   "bracket": 47,
+   "age": "U19",
+   "rows": 128,
+   "bytes": 475363
+  },
+  {
+   "bracket": 47,
+   "age": "U15",
+   "rows": 128,
+   "bytes": 475352
+  },
+  {
+   "bracket": 51,
+   "age": "U16",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U17",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U12",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U11",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U13",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U14",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U19",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 51,
+   "age": "U15",
+   "rows": 0,
+   "bytes": 48,
+   "sample": "<h2 class=\"text-center\">There are no teams.</h2>"
+  },
+  {
+   "bracket": 48,
+   "age": "U16",
+   "rows": 38,
+   "bytes": 142523
+  },
+  {
+   "bracket": 48,
+   "age": "U17",
+   "rows": 38,
+   "bytes": 142490
+  },
+  {
+   "bracket": 48,
+   "age": "U12",
+   "rows": 39,
+   "bytes": 146016
+  },
+  {
+   "bracket": 48,
+   "age": "U11",
+   "rows": 38,
+   "bytes": 142427
+  },
+  {
+   "bracket": 48,
+   "age": "U13",
+   "rows": 49,
+   "bytes": 183353
+  },
+  {
+   "bracket": 48,
+   "age": "U14",
+   "rows": 50,
+   "bytes": 186884
+  },
+  {
+   "bracket": 48,
+   "age": "U19",
+   "rows": 38,
+   "bytes": 142503
+  },
+  {
+   "bracket": 48,
+   "age": "U15",
+   "rows": 38,
+   "bytes": 142513
+  }
+ ],
+ "matchesPerBracket": {
+  "47": 6239,
+  "48": 3613,
+  "51": 546
+ }
+}
