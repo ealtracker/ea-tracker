@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>EAL Tracker · Elite Academy League standings, schedules and results</title>
-<meta name="description" content="Standings, schedules, results and rankings for every Elite Academy League club. Independent, updated twice a day from the league's public data.">
+<title>EAL Tracker · Elite Academy League standings, schedules, results & rankings</title>
+<meta name="description" content="Elite Academy League standings, schedules, results and national rankings for every EA, EA National and EA2 club and team, U11 to U19. Independent, updated twice a day from the league's public data.">
+<link rel="canonical" href="__SITE__">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"EAL Tracker","alternateName":"Elite Academy League Tracker","url":"__SITE__","description":"Standings, schedules, results and rankings for the Elite Academy League (EA, EA National and EA2)."}</script>
 <meta name="theme-color" content="#060c17">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -723,6 +725,8 @@ body{--clubc:var(--club,#2dd4bf)}
   .cw-track a{width:72px;height:72px;border-radius:18px}.cw-track img{width:56px;height:56px}
 }
 @media (max-width:979px){.hero.home{gap:18px}.hero.home .pitch{background-size:auto}.cwall{order:-1;margin:0 calc(-1 * clamp(22px,4vw,42px));gap:10px}.cw-row:nth-child(n+3){display:none}.cw-track{gap:10px}.cw-track a{width:54px;height:54px;border-radius:14px}.cw-track img{width:42px;height:42px}}
+.about-site{max-width:760px;color:var(--muted);margin:0}
+.about-site a{color:var(--accent-2)}
 /* rankings */
 .rhead{text-align:center;padding:24px 18px;display:grid;justify-items:center;gap:10px;grid-template-columns:minmax(0,1fr)}
 .rhead>*{max-width:100%;min-width:0}
@@ -825,6 +829,7 @@ footer a:hover{color:var(--accent)}
   <footer>
     <div class="asof"><span class="live" aria-hidden="true"></span><span>Updated automatically twice a day · League data as of <b id="asof"></b></span></div>
     <nav><a href="#home">Clubs</a><a href="#weekend">This week</a><a href="#rankings">National Rankings</a><a href="#club-table">Club vs Club</a><a href="#app">Get the app</a><a href="#feedback" id="ft-fb">Feedback</a><a href="#about">Data notes</a></nav>
+    <p class="about-site">EAL Tracker follows every club and team in the Elite Academy League: EA, EA National and EA2, from U11 to U19. See standings, schedules, results, national rankings and club-vs-club comparisons for each division, updated twice a day. <a href="clubs/">All clubs A–Z</a>.</p>
     <div>Independent project. Not affiliated with or endorsed by the Elite Academy League or Modular11. Data comes from the league's public schedule and standings.</div>
     <div>Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>), shown for matches in the next 16 days.</div>
   </footer>
@@ -925,6 +930,7 @@ function clubOptions(sel){
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2200)}
 function share(title,url){
   url=url||location.href;
+  if(/\/(club|team)\/[^/?#]+\/$/.test(url))url+='?s=1';
   const name=title.replace(/ · EAL Tracker$/,'');
   const msg=`${name} on EAL Tracker: ${url}`;
   const e=encodeURIComponent;
