@@ -98,6 +98,19 @@ async function main() {
   if (unique !== matches.length) throw new Error(`duplicate matches: ${matches.length} rows, ${unique} unique`);
   const bad = matches.filter(m => !/^\d+ : \d+$|^TBD$/.test(m.s) || !m.id || !m.h || !m.a);
   if (bad.length) throw new Error('unreadable match rows: ' + JSON.stringify(bad.slice(0, 3)));
+  // If EA National comes back empty, look for its tables under other list codes (U15 only) and note what answers.
+  if (!report.tables.some(t => t.bracket === 51 && t.rows)) {
+    report.probe = [];
+    for (let lt = 40; lt <= 70; lt++) {
+      if (BRACKETS.includes(lt)) continue;
+      try {
+        const t = await get(`/public_schedule/league/get_teams?tournament_type=league&UID_age=33&UID_gender=3&UID_event=${SEASON.event}&list_type=${lt}`);
+        const rows = parseStandings(t, 51, 'U15');
+        if (rows.length) report.probe.push({ list_type: lt, rows: rows.length, teams: rows.slice(0, 6).map(r => r.n), divs: [...new Set(rows.map(r => r.div))].slice(0, 6) });
+      } catch (e) { report.probe.push({ list_type: lt, error: String(e.message || e).slice(0, 200) }); }
+      await sleep(250);
+    }
+  }
   report.matchesPerBracket = Object.fromEntries(BRACKETS.map(b => [b, matches.filter(m => m.b === ({ 47: 'EA', 51: 'EA National', 48: 'EA2' })[b]).length]));
   writeFileSync('data/pull-report.json', JSON.stringify(report, null, 1));
   writeFileSync(process.argv[2] || 'data/raw.json', JSON.stringify({ pulledAt: new Date().toISOString(), source: 'modular11.com', pages, matches, standings }));
