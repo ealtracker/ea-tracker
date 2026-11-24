@@ -153,7 +153,7 @@ RH=rank_history()
 COLORS={int(k):v for k,v in json.load(open('crests/colors.json')).items()} if os.path.exists('crests/colors.json') else {}
 data=dict(site=SITE,slugs=SLUGS,season='2026–27',comps=COMPS,asOfLong=asof,asOfIso=local.isoformat(),clubs=clubs,teams=teams,matches=matches,venues=venues,crests=CRESTS,colors=COLORS,rh=RH,
  moveSince=base[0].strftime('%b %-d, %Y') if base else None,
- calc=CALC,calcSince='Nov 19, 2026',check=dict(ok=ok,diff=diff,total=ok+diff,tbdPast=tbd,futureScored=fut,midnight=mid,noTable=sorted(no)))
+ analytics=bool(X.analytics_snippet(os.environ.get('GOATCOUNTER_CODE',''))),calc=CALC,calcSince='Nov 19, 2026',check=dict(ok=ok,diff=diff,total=ok+diff,tbdPast=tbd,futureScored=fut,midnight=mid,noTable=sorted(no)))
 js=json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 FEEDBACK=os.environ.get('FEEDBACK_ENDPOINT','').strip()
 if not re.fullmatch(r'https://[^\s"<>]+',FEEDBACK): FEEDBACK=''
