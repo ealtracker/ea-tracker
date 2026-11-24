@@ -1864,7 +1864,7 @@ document.addEventListener('click',e=>{
   if(pkOpen&&!e.target.closest('.pk-pop'))pkClose();
 });
 /* ---------- router ---------- */
-function setTitle(s){document.title=s?`${s} · EAL Tracker`:'EAL Tracker · Elite Academy League standings, schedules and results'}
+function setTitle(s){document.title=s?`${s} · EAL Tracker`:'EAL Tracker · Elite Academy League standings, schedules, results & rankings'}
 function tint(id){const v=id!=null&&(D.colors||{})[id];v?document.body.style.setProperty('--club',v):document.body.style.removeProperty('--club')}
 function render(scroll){
   reg=[];closeOv();pkClose();tint(null);
