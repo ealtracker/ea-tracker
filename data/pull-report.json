@@ -1,17 +1,17 @@
 {
- "pulledAt": "2026-11-23T16:40:40.142Z",
+ "pulledAt": "2026-11-24T05:25:34.225Z",
  "tables": [
   {
    "bracket": 47,
    "age": "U16",
    "rows": 128,
-   "bytes": 475364
+   "bytes": 475368
   },
   {
    "bracket": 47,
    "age": "U17",
    "rows": 128,
-   "bytes": 475329
+   "bytes": 475334
   },
   {
    "bracket": 47,
@@ -29,13 +29,13 @@
    "bracket": 47,
    "age": "U13",
    "rows": 128,
-   "bytes": 475616
+   "bytes": 475619
   },
   {
    "bracket": 47,
    "age": "U14",
    "rows": 128,
-   "bytes": 475561
+   "bytes": 475564
   },
   {
    "bracket": 47,
